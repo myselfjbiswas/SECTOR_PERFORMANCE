@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JB Sector Watch — Live SectorScope</title>
+<meta name="description" content="JB Sector Watch · Live TradingView powered sector dashboard for NSE F&O sectors, heatmap, and sector-wise stocks." />
+<link rel="preconnect" href="https://s3.tradingview.com">
+<style>
+  :root{
+    --bg1:#050608; --bg2:#0b0f13; --panel:#0f1720; --muted:#94a3b8; --accent:#06b6d4; --glass: rgba(255,255,255,0.03);
+    --green:#10b981; --red:#ef4444;
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#e6eef8;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1200px;margin:18px auto;padding:18px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#0ea5a4,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:800;color:#021;box-shadow:0 6px 26px rgba(3,7,18,0.6)}
+  h1{font-size:20px;margin:0}
+  .sub{color:var(--muted);font-size:13px}
+  .controls{display:flex;gap:8px;align-items:center}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:inherit;cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg, rgba(6,182,212,0.12), rgba(6,182,212,0.06));border:1px solid rgba(6,182,212,0.18)}
+  .btn.active{box-shadow:0 10px 30px rgba(3,7,18,0.6)}
+  /* Top chart bars */
+  .chart-wrap{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:18px;border-radius:12px; margin-bottom:18px;box-shadow:0 10px 30px rgba(2,6,23,0.7)}
+  .chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .bars{display:flex;gap:12px;align-items:flex-end;height:260px; padding:14px}
+  .bar{width:56px;border-radius:12px 12px 6px 6px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;overflow:visible; transition:height .6s ease, transform .2s}
+  .bar .label{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;color:var(--muted);margin-top:8px}
+  .bar .vtxt{position:absolute;top:-22px;font-size:12px}
+  .bar.pos{background:linear-gradient(180deg,#3ee8b6,#10b981);box-shadow:inset 0 -18px 36px rgba(12,45,28,0.08)}
+  .bar.neg{background:linear-gradient(180deg,#ff8a8a,#ef4444);box-shadow:inset 0 -18px 36px rgba(45,12,12,0.08)}
+  /* layout */
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+  .left{display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--panel);padding:14px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.7)}
+  .sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .sector-card{padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);min-height:140px;display:flex;flex-direction:column;gap:8px}
+  .sector-title{font-weight:700}
+  .small{color:var(--muted);font-size:13px}
+  .placeholder{height:110px;border-radius:8px;background:var(--glass);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .stock-list{max-height:160px;overflow:auto;padding-right:6px}
+  .stock-item{display:flex;justify-content:space-between;padding:6px;border-radius:8px;background:rgba(255,255,255,0.01);margin-bottom:6px}
+  /* sidebar */
+  aside{width:360px}
+  .mini{height:70px;border-radius:8px;background:var(--glass);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  /* responsive */
+  @media(max-width:980px){.grid{grid-template-columns:1fr}.bars{height:180px}.bar{width:42px}.aside{width:100%}}
+  footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">JB</div>
+      <div>
+        <h1>JB Sector Watch</h1>
+        <div class="sub">Live sector snapshot · TradingView powered · F&O friendly</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary active" id="mockBtn">Mock View</button>
+      <button class="btn" id="liveBtn">Try Live (TradingView)</button>
+      <button class="btn" id="heatmapBtn">Heatmap</button>
+      <button class="btn" id="editBtn">Edit Symbols</button>
+    </div>
+  </header>
+
+  <!-- Top animated bars -->
+  <section class="chart-wrap card">
+    <div class="chart-head">
+      <div style="font-weight:800">Sector Performance</div>
+      <div class="small">Green ↑ positive · Red ↓ negative</div>
+    </div>
+    <div id="bars" class="bars" role="img" aria-label="Sector performance bars"></div>
+    <div style="margin-top:10px" class="small">Tip: click any sector card below to focus the main chart</div>
+  </section>
+
+  <!-- main grid -->
+  <div class="grid">
+    <div class="left">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-weight:700">Sectors</div>
+          <div class="small">Click a sector to open mini chart</div>
+        </div>
+
+        <div id="sectorGrid" class="sector-grid">
+          <!-- sector cards will be injected here -->
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-weight:700">Main Chart</div>
+          <div class="small">Switch symbol using the quick buttons</div>
+        </div>
+
+        <div id="mainChart" style="height:380px" class="placeholder">Main TradingView chart</div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn quick" data-sym="NSE:NIFTY">NIFTY</button>
+          <button class="btn quick" data-sym="NSE:NIFTYBANK">Bank</button>
+          <button class="btn quick" data-sym="NSE:NIFTYIT">IT</button>
+          <button class="btn quick" data-sym="NSE:NIFTYAUTO">Auto</button>
+          <button class="btn quick" data-sym="NSE:NIFTYFMCG">FMCG</button>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:8px">Market Overview</div>
+        <div id="marketOverview" class="mini">Market Overview</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div style="font-weight:700;margin-bottom:8px">Top F&O Stocks</div>
+        <div id="topSymbols" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>Built for <strong>jbsectorwatch.blogspot.com</strong> — TradingView widgets, no API keys, F&O friendly.</footer>
+</div>
+
+<!-- TradingView library -->
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+/* ===========================
+   Configuration — edit if needed
+   =========================== */
+
+const sectors = [
+  "BANK","PSU BANK","REALTY","NIFTY 50","ENERGY","PVT BANK",
+  "SENSEX","NIFTY MID SELECT","IT","FMCG","METAL","CEMENT",
+  "PHARMA","AUTO","FIN SERVICE"
+];
+
+/* Representative TradingView symbols.
+   Replace any symbol with your preferred TradingView string (NSE:SYMBOL or BSE:SYMBOL). */
+const sectorSymbols = {
+  "BANK":"NSE:NIFTYBANK",
+  "PSU BANK":"NSE:NIFTY_PSBANK","REALTY":"NSE:NIFTYREALTY","NIFTY 50":"NSE:NIFTY",
+  "ENERGY":"NSE:NIFTYENERGY","PVT BANK":"NSE:NIFTYBANK","SENSEX":"BSE:SENSEX",
+  "NIFTY MID SELECT":"NSE:NIFTY_MIDCAP_50","IT":"NSE:NIFTYIT","FMCG":"NSE:NIFTYFMCG",
+  "METAL":"NSE:NIFTYMETAL","CEMENT":"NSE:NIFTYCEMENT","PHARMA":"NSE:NIFTYPHARMA",
+  "AUTO":"NSE:NIFTYAUTO","FIN SERVICE":"NSE:NIFTYFINSERVICE"
+};
+
+/* Per-sector stock lists you provided — Auto, FMCG, and Sensex (mapped to common tickers where possible).
+   You can add other sectors similarly. */
+const sectorStocks = {
+  "AUTO":[
+    "NSE:MARUTI","NSE:TUBEINVEST","NSE:EXIDEIND","NSE:TITAGARH","NSE:TVSMOTOR",
+    "NSE:SONA","NSE:BOSCHLTD","NSE:BHARATFORG","NSE:UNOMINDA","NSE:BAJAJ_AUTO",
+    "NSE:ASHOKLEY","NSE:MOTHERSON","NSE:EICHERMOT","NSE:TATAMOTORS","NSE:HEROMOTOCO","NSE:M_M"
+  ],
+  "FMCG":[
+    "NSE:DABUR","NSE:TATACONSUM","NSE:KALYANKJIL","NSE:MARICO","NSE:ITC","NSE:COLPAL",
+    "NSE:UNITED_SPIRITS","NSE:BRITANNIA","NSE:NESTLEIND","NSE:VBL","NSE:DMART","NSE:NYKAA",
+    "NSE:HINDUNILVR","NSE:GODREJCP","NSE:SUPREMEIND"
+  ],
+  "SENSEX":[
+    "NSE:HDFCBANK","NSE:RELIANCE","NSE:ICICIBANK","NSE:BHARTIARTL","NSE:INFY",
+    "NSE:LTI","NSE:ITC","NSE:SBIN","NSE:AXISBANK","NSE:TCS","NSE:KOTAKBANK","NSE:M_M",
+    "NSE:BAJFINANCE","NSE:HINDUNILVR","NSE:MARUTI","NSE:SUNPHARMA","NSE:HCLTECH","NSE:NTPC",
+    "NSE:TITAN","NSE:BEL","NSE:TATASTEEL","NSE:ULTRACEMCO","NSE:POWERGRID","NSE:BAJAJFINSV",
+    "NSE:ASIANPAINT","NSE:ADANIPORTS","NSE:TRENT","NSE:TECHM","NSE:TATAMOTORS"
+  ]
+};
+
+/* Mock values for the top bars (match screenshot feel). These are updated with small jitter to look live.
+   If you later add server-side data, replace these with the real numbers. */
+let mockValues = {
+  "BANK":0.65,"PSU BANK":0.58,"REALTY":0.33,"NIFTY 50":0.18,"ENERGY":0.12,"PVT BANK":0.07,
+  "SENSEX":0.02,"NIFTY MID SELECT":0.01,"IT":-0.12,"FMCG":-0.22,"METAL":-0.28,"CEMENT":-0.35,
+  "PHARMA":-0.55,"AUTO":-0.95,"FIN SERVICE":-1.2
+};
+
+/* ===========================
+   UI / Widget Logic
+   =========================== */
+
+const barsEl = document.getElementById('bars');
+const gridEl = document.getElementById('sectorGrid');
+const mainChartEl = document.getElementById('mainChart');
+const marketOverviewEl = document.getElementById('marketOverview');
+const topSymbolsEl = document.getElementById('topSymbols');
+
+function buildBars(values){
+  barsEl.innerHTML = '';
+  const maxAbs = 1.6;
+  sectors.forEach(sec=>{
+    const v = (values[sec] !== undefined) ? values[sec] : 0;
+    const height = Math.min(200, Math.abs(v)/maxAbs*200) + 36;
+    const bar = document.createElement('div');
+    bar.className = 'bar ' + (v>=0 ? 'pos':'neg');
+    bar.style.height = height+'px';
+    // mouse hover enlarge
+    bar.addEventListener('mouseenter', ()=>bar.style.transform='translateY(-6px) scale(1.02)');
+    bar.addEventListener('mouseleave', ()=>bar.style.transform='translateY(0) scale(1)');
+    // value label
+    const tv = document.createElement('div'); tv.className='vtxt'; tv.textContent = (v>=0?'+':'')+v.toFixed(2)+'%';
+    const lbl = document.createElement('div'); lbl.className='label'; lbl.textContent = sec;
+    bar.appendChild(tv); bar.appendChild(lbl);
+    // click scroll to sector card
+    bar.addEventListener('click', ()=>{
+      const card = document.getElementById('card-'+sec.replace(/\s+/g,'_'));
+      if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+    barsEl.appendChild(bar);
+  });
+}
+
+// create sector cards
+function buildSectorCards(){
+  gridEl.innerHTML = '';
+  sectors.forEach(sec=>{
+    const card = document.createElement('div');
+    card.className = 'sector-card';
+    card.id = 'card-'+sec.replace(/\s+/g,'_');
+    const inner = document.createElement('div');
+    inner.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="sector-title">${sec}</div>
+        <div class="small">Rep: <span style="color:#9ad">${sectorSymbols[sec]||'—'}</span></div>
+      </div>
+      <div id="tv-${sec.replace(/\s+/g,'_')}" class="placeholder" style="height:110px">Click 'Try Live' to load chart</div>
+      <div class="small" style="margin-top:6px">Top stocks</div>
+      <div class="stock-list" id="stocks-${sec.replace(/\s+/g,'_')}"></div>
+    `;
+    card.appendChild(inner);
+    gridEl.appendChild(card);
+
+    // populate stock list if available
+    const listEl = document.getElementById('stocks-'+sec.replace(/\s+/g,'_'));
+    if(sectorStocks[sec]){
+      sectorStocks[sec].forEach(sym=>{
+        const it = document.createElement('div'); it.className='stock-item';
+        // show symbol and placeholder for tiny chart
+        const left = document.createElement('div'); left.textContent = sym.replace(/^NSE:|^BSE:/,'');
+        const right = document.createElement('div'); right.style.width='120px';
+        const tinyId = 'tiny-'+sym.replace(/[:]/g,'_')+'-'+Math.random().toString(36).slice(2,7);
+        right.innerHTML = `<div id="${tinyId}" style="height:46px"></div>`;
+        it.appendChild(left); it.appendChild(right);
+        listEl.appendChild(it);
+        // create tiny chart (quietly) — will fail gracefully in preview if blocked
+        try {
+          new TradingView.TinyChartWidget({
+            "container_id": tinyId,
+            "symbol": sym,
+            "width":"100%",
+            "height":46,
+            "locale":"en",
+            "colorTheme":"dark",
+            "isTransparent":true
+          });
+        } catch(e){}
+      });
+    } else {
+      listEl.innerHTML = `<div class="small">No stock list provided.</div>`;
+    }
+
+    // click shows main chart for sector rep symbol
+    card.addEventListener('click', ()=>{
+      const sym = sectorSymbols[sec];
+      if(sym) loadMainChart(sym);
+    });
+  });
+}
+
+// load main TradingView chart
+function loadMainChart(symbol){
+  mainChartEl.innerHTML = '';
+  try {
+    new TradingView.widget({
+      "container_id": "mainChart",
+      "autosize": true,
+      "symbol": symbol,
+      "interval": "60",
+      "timezone": "Asia/Kolkata",
+      "theme": "dark",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#0f1724",
+      "enable_publishing": false,
+      "allow_symbol_change": false,
+      "studies": ["MAExp@tv-basicstudies"]
+    });
+  } catch(e){
+    mainChartEl.innerHTML = '<div class="placeholder">Chart failed to load</div>';
+  }
+}
+
+// market overview & top symbols
+function loadMarketOverview(){
+  marketOverviewEl.innerHTML = '';
+  try {
+    new TradingView.MarketOverview({
+      "container_id":"marketOverview",
+      "width":"100%","height":220,"locale":"en","colorTheme":"dark","isTransparent":true,
+      "showChart":true,"plots":[{"title":"NIFTY","symbols":[{"s":"NSE:NIFTY"}]}]
+    });
+  } catch(e){ marketOverviewEl.innerHTML='<div class="mini">Overview not available</div>'; }
+}
+
+function populateTopSymbols(){
+  topSymbolsEl.innerHTML = '';
+  const tops = ["NSE:RELIANCE","NSE:TCS","NSE:SBIN","NSE:INFY","NSE:HDFCBANK","NSE:ICICIBANK"];
+  tops.forEach(sym=>{
+    const box = document.createElement('div'); box.className='card';
+    box.style.padding='8px';
+    const id = 'top-'+sym.replace(/[:]/g,'_')+'-'+Math.random().toString(36).slice(2,6);
+    box.innerHTML = `<div style="font-size:13px;color:var(--muted);margin-bottom:6px">${sym.replace(/^NSE:|^BSE:/,'')}</div><div id="${id}" style="height:60px"></div>`;
+    topSymbolsEl.appendChild(box);
+    try{
+      new TradingView.TinyChartWidget({"container_id":id,"symbol":sym,"width":"100%","height":60,"locale":"en","colorTheme":"dark","isTransparent":true});
+    }catch(e){}
+  });
+}
+
+/* Try live: populate each sector card with its representative TradingView mini-widget */
+function tryLive(){
+  sectors.forEach(sec=>{
+    const vid = 'tv-'+sec.replace(/\s+/g,'_');
+    const container = document.getElementById(vid);
+    container.innerHTML = '';
+    const sym = sectorSymbols[sec];
+    if(sym){
+      try {
+        new TradingView.MediumWidget({
+          "container_id": vid,
+          "symbols": [[sym]],
+          "greyText": "Quotes",
+          "gridLineColor": "rgba(255,255,255,0.03)",
+          "fontColor":"#dbe9ff",
+          "width":"100%","height":110,"locale":"en","colorTheme":"dark","isTransparent":true
+        });
+      } catch(e){
+        container.innerHTML = '<div class="placeholder">Widget blocked / unavailable</div>';
+      }
+    } else {
+      container.innerHTML = '<div class="placeholder">No symbol mapped</div>';
+    }
+  });
+  // hide mock bars if you prefer (we keep them visible for numeric clarity)
+}
+
+// edit symbols (prompt-based quick editor)
+function editSymbols(){
+  let promptTxt = "Update mapping with: SECTOR=TRADINGVIEW_SYMBOL\\nExample: BANK=NSE:NIFTYBANK\\nType CANCEL to stop.";
+  while(true){
+    const inp = prompt(promptTxt);
+    if(!inp) break;
+    if(inp.trim().toUpperCase()==='CANCEL') break;
+    const parts = inp.split('=');
+    if(parts.length!==2){ alert('Invalid format. Use SECTOR=SYMBOL'); continue; }
+    const key = parts[0].trim();
+    const val = parts[1].trim();
+    if(!sectors.includes(key)){ alert('Unknown sector. Make sure name matches exactly.'); continue; }
+    sectorSymbols[key] = val;
+    alert('Updated '+key+' -> '+val+' (Click Try Live to reload widgets)');
+    break;
+  }
+}
+
+/* Buttons */
+document.getElementById('mockBtn').addEventListener('click', ()=>{
+  document.getElementById('mockBtn').classList.add('active'); document.getElementById('liveBtn').classList.remove('active');
+  buildBars(mockValues);
+  // clear tv placeholders
+  sectors.forEach(sec=>{
+    const id='tv-'+sec.replace(/\s+/g,'_');
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = '<div class="placeholder">Click Try Live to load widget</div>';
+  });
+});
+document.getElementById('liveBtn').addEventListener('click', ()=>{
+  document.getElementById('liveBtn').classList.add('active'); document.getElementById('mockBtn').classList.remove('active');
+  tryLive();
+});
+document.getElementById('heatmapBtn').addEventListener('click', ()=>{
+  alert('Heatmap: TradingView Market Map widget is not embeddable reliably on Blogger pages in all cases. I can provide a heatmap page next if you want a separate implementation.');
+});
+document.getElementById('editBtn').addEventListener('click', editSymbols);
+
+/* Quick symbol buttons for main chart */
+document.querySelectorAll('.quick').forEach(b=>b.addEventListener('click', function(){
+  document.querySelectorAll('.quick').forEach(x=>x.classList.remove('active'));
+  this.classList.add('active');
+  loadMainChart(this.dataset.sym);
+}));
+
+/* build initial UI */
+buildSectorCards();
+buildBars(mockValues);
+loadMainChart('NSE:NIFTY'); // default main chart
+loadMarketOverview();
+populateTopSymbols();
+
+/* animate small jitter for mock bars — looks live */
+setInterval(()=>{
+  if(document.getElementById('mockBtn').classList.contains('active')){
+    const jitter = {};
+    sectors.forEach(s=>{
+      const base = mockValues[s] || 0;
+      jitter[s] = +(base + (Math.random()-0.5)*0.14).toFixed(2);
+    });
+    buildBars(jitter);
+  }
+}, 2700);
+
+</script>
+
+</body>
+</html>
