@@ -3,1358 +3,933 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Stock Market Sector Analysis</title>
+    <title>Sector Scope | Indian Stock Market Analysis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --bull-green: #26a69a;
-            --bear-red: #ef5350;
-            --dark-bg: #0f172a;
-            --card-bg: #1e293b;
-            --border-color: #334155;
-            --text-light: #f1f5f9;
-            --text-gray: #94a3b8;
-            --accent-blue: #3b82f6;
-            --accent-purple: #8b5cf6;
-            --warning: #f59e0b;
-            --info: #0ea5e9;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-light);
+            background-color: #0a1929;
+            color: #e6f7ff;
             line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
+            padding: 0;
         }
 
         .container {
-            width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px;
         }
 
-        /* Header Styles */
         header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 0;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #1a3a5f;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--bull-green), var(--bear-red));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .logo-bull, .logo-bear {
-            position: absolute;
-            font-size: 28px;
-            color: white;
-        }
-
-        .logo-bull {
-            top: 8px;
-            left: 8px;
-        }
-
-        .logo-bear {
-            bottom: 8px;
-            right: 8px;
-        }
-
-        .logo-text {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--bull-green), var(--bear-red));
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00c9ff, #92fe9d);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
 
         .tagline {
-            font-size: 14px;
-            color: var(--text-gray);
-            margin-top: 3px;
+            color: #8cb3d9;
+            font-size: 1.1rem;
         }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
+        /* Overall Sector Ranking */
+        .overall-ranking {
+            background: linear-gradient(145deg, #0f2a4a, #1a3a5f);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2a4a7a;
+            margin-bottom: 40px;
         }
 
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 5px 0;
-        }
-
-        nav a:hover {
-            color: var(--accent-blue);
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-blue);
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 60px 0 40px;
+        .overall-title {
+            font-size: 1.8rem;
+            color: #6dd5ed;
+            margin-bottom: 25px;
             text-align: center;
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
-            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            border-bottom: 1px solid #2a4a7a;
         }
 
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, var(--bull-green), var(--accent-blue), var(--bear-red));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-
-        .market-stats {
+        .ranking-row {
             display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            min-width: 180px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-
-        .nifty-change.positive {
-            color: var(--bull-green);
-        }
-
-        .nifty-change.negative {
-            color: var(--bear-red);
-        }
-
-        /* Sector Tabs */
-        .sector-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 12px 25px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            border-radius: 8px;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #1e3a5f;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            transition: background 0.3s;
         }
 
-        .tab-btn.active, .tab-btn:hover {
-            background: linear-gradient(135deg, var(--bull-green), var(--accent-blue));
-            border-color: var(--bull-green);
+        .ranking-row:hover {
+            background: rgba(42, 74, 122, 0.3);
         }
 
-        /* Stock Table */
-        .stock-table-container {
-            background: var(--card-bg);
-            border-radius: 12px;
+        .ranking-row:last-child {
+            border-bottom: none;
+        }
+
+        .sector-name-col {
+            width: 200px;
+            font-weight: 600;
+            color: #a8d8ff;
+        }
+
+        .sentiment-bar-col {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .sentiment-bar-container {
+            flex: 1;
+            height: 16px;
+            background: #0a1929;
+            border-radius: 8px;
             overflow: hidden;
-            border: 1px solid var(--border-color);
-            margin: 30px 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
-        .table-header {
+        .sentiment-fill {
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        .bullish-fill {
+            background: linear-gradient(90deg, #00b09b, #96c93d);
+        }
+
+        .bearish-fill {
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+        }
+
+        .sentiment-percent {
+            width: 60px;
+            text-align: right;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+
+        .bullish-percent {
+            color: #00b09b;
+        }
+
+        .bearish-percent {
+            color: #ff4b2b;
+        }
+
+        /* Sector Details Section */
+        .sector-details {
+            display: none;
+            background: linear-gradient(145deg, #0f2a4a, #1a3a5f);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2a4a7a;
+            margin-bottom: 40px;
+        }
+
+        .sector-details-header {
             display: flex;
             justify-content: space-between;
-            padding: 20px;
-            background: rgba(30, 41, 59, 0.8);
-            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #2a4a7a;
         }
 
-        .table-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .sector-details-title {
+            font-size: 1.8rem;
+            color: #6dd5ed;
         }
 
-        .search-box {
-            padding: 8px 15px;
+        .back-button {
+            background: #0a1929;
+            color: #6dd5ed;
+            border: 1px solid #6dd5ed;
+            padding: 8px 16px;
             border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.7);
-            color: var(--text-light);
-            width: 250px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
-        table {
+        .back-button:hover {
+            background: #6dd5ed;
+            color: #0a1929;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-select {
+            background: #0a1929;
+            color: #e6f7ff;
+            border: 1px solid #2a4a7a;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Stocks List */
+        .stocks-list-view {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
 
-        th {
-            background: rgba(30, 41, 59, 0.6);
+        .stocks-list-view th {
+            background: rgba(42, 74, 122, 0.5);
             padding: 15px;
             text-align: left;
             font-weight: 600;
-            color: var(--text-gray);
+            color: #8cb3d9;
+            border-bottom: 2px solid #2a4a7a;
             cursor: pointer;
             position: relative;
         }
 
-        th:hover {
-            background: rgba(56, 72, 98, 0.6);
+        .stocks-list-view th:hover {
+            background: rgba(56, 86, 138, 0.5);
         }
 
-        th.sortable::after {
+        .stocks-list-view th::after {
             content: "↕";
             position: absolute;
             right: 10px;
             opacity: 0.5;
         }
 
-        th.sorted-asc::after {
+        .stocks-list-view th.sorted-asc::after {
             content: "↑";
             opacity: 1;
-            color: var(--bull-green);
+            color: #00b09b;
         }
 
-        th.sorted-desc::after {
+        .stocks-list-view th.sorted-desc::after {
             content: "↓";
             opacity: 1;
-            color: var(--bear-red);
+            color: #ff4b2b;
         }
 
-        td {
+        .stocks-list-view td {
             padding: 15px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #1e3a5f;
         }
 
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover {
-            background: rgba(51, 65, 85, 0.3);
+        .stocks-list-view tr:hover {
+            background: rgba(42, 74, 122, 0.3);
         }
 
         .stock-symbol {
             font-weight: 700;
-            color: var(--accent-blue);
+            color: #6dd5ed;
+            font-size: 1.1rem;
+        }
+
+        .stock-name {
+            color: #8cb3d9;
+        }
+
+        .stock-price {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .stock-change {
+            font-weight: 700;
+            font-size: 1.1rem;
         }
 
         .positive {
-            color: var(--bull-green);
+            color: #00b09b;
         }
 
         .negative {
-            color: var(--bear-red);
+            color: #ff4b2b;
         }
 
-        .signal-buy {
-            background: rgba(38, 166, 154, 0.15);
-            color: var(--bull-green);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .signal-sell {
-            background: rgba(239, 83, 80, 0.15);
-            color: var(--bear-red);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .signal-hold {
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--accent-purple);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Chart Section */
-        .chart-section {
-            margin: 40px 0;
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .chart-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .chart-controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        .time-filter {
-            padding: 8px 15px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .time-filter.active {
-            background: var(--accent-blue);
-            border-color: var(--accent-blue);
-        }
-
-        .chart-container {
-            height: 500px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        #performance-chart {
-            height: 100%;
-        }
-
-        /* Back Button */
-        .back-button {
-            background: var(--accent-purple);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            margin: 15px 0;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .back-button:hover {
-            background: #7c3aed;
-            transform: translateY(-2px);
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(15, 23, 42, 0.95);
-            padding: 40px 0 20px;
-            border-top: 1px solid var(--border-color);
-            margin-top: 50px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background: linear-gradient(to right, var(--bull-green), var(--bear-red));
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: var(--text-gray);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-blue);
-        }
-
-        .disclaimer {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            border-left: 4px solid var(--warning);
-        }
-
-        .disclaimer h4 {
-            margin-bottom: 10px;
-            color: var(--warning);
-        }
-
-        .copyright {
+        .footer {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-gray);
+            padding: 30px 0;
+            color: #8cb3d9;
             font-size: 0.9rem;
+            border-top: 1px solid #1a3a5f;
+            margin-top: 20px;
         }
 
-        /* Responsive Design */
         @media (max-width: 992px) {
-            .hero h1 {
-                font-size: 2.3rem;
-            }
-            
-            .market-stats {
-                gap: 20px;
-            }
-            
-            .stat-card {
-                min-width: 150px;
-                padding: 15px;
-            }
-            
-            .stat-value {
-                font-size: 1.7rem;
+            .sector-name-col {
+                width: 150px;
             }
         }
 
         @media (max-width: 768px) {
-            .header-content {
+            .ranking-row {
                 flex-direction: column;
-                gap: 20px;
-            }
-            
-            nav ul {
-                gap: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .market-stats {
-                gap: 15px;
-            }
-            
-            .stat-card {
-                min-width: 130px;
-                padding: 12px;
-            }
-            
-            .stat-value {
-                font-size: 1.4rem;
-            }
-            
-            .table-header {
-                flex-direction: column;
-                gap: 15px;
                 align-items: flex-start;
             }
             
-            .search-box {
+            .sector-name-col {
                 width: 100%;
+                margin-bottom: 10px;
             }
             
-            th, td {
-                padding: 10px 8px;
+            .sentiment-bar-col {
+                width: 100%;
+                padding: 0;
+            }
+            
+            .stocks-list-view {
                 font-size: 0.9rem;
+            }
+            
+            .stocks-list-view th,
+            .stocks-list-view td {
+                padding: 10px 8px;
+            }
+            
+            .filter-section {
+                justify-content: center;
             }
         }
 
         @media (max-width: 576px) {
-            .sector-tabs {
-                gap: 5px;
-            }
-            
-            .tab-btn {
-                padding: 10px 15px;
-                font-size: 0.9rem;
-            }
-            
-            .chart-container {
-                height: 400px;
-            }
-            
-            .chart-controls {
-                flex-wrap: wrap;
+            .stocks-list-view th:nth-child(2),
+            .stocks-list-view td:nth-child(2) {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-content">
-            <div class="logo-container">
-                <div class="logo-circle">
-                    <i class="fas fa-bullhorn logo-bull"></i>
-                    <i class="fas fa-bear logo-bear"></i>
-                </div>
-                <div>
-                    <div class="logo-text">Sector Analysis</div>
-                    <div class="tagline">Indian Stock Market Intelligence</div>
-                </div>
-            </div>
-            
-            <nav>
-                <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-chart-line"></i> Charts</a></li>
-                    <li><a href="#"><i class="fas fa-newspaper"></i> News</a></li>
-                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Events</a></li>
-                    <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Indian Stock Market Sector Analysis</h1>
-            <p>Bullish/Bearish sentiment analysis with performance ranking from most bullish to most bearish</p>
-            
-            <div class="market-stats">
-                <div class="stat-card">
-                    <div>NIFTY 50</div>
-                    <div class="stat-value">19,845.25</div>
-                    <div class="nifty-change positive">+0.85% <i class="fas fa-arrow-up"></i></div>
-                </div>
-                
-                <div class="stat-card">
-                    <div>SENSEX</div>
-                    <div class="stat-value">66,723.45</div>
-                    <div class="nifty-change positive">+0.62% <i class="fas fa-arrow-up"></i></div>
-                </div>
-                
-                <div class="stat-card">
-                    <div>Sectors Tracked</div>
-                    <div class="stat-value" id="total-sectors">15</div>
-                    <div class="nifty-change">Across Market</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div>Most Bullish</div>
-                    <div class="stat-value" id="most-bullish">AUTO</div>
-                    <div class="nifty-change positive">+2.34%</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sector Tabs -->
     <div class="container">
-        <div class="sector-tabs" id="sector-tabs-container">
-            <!-- Sector tabs will be populated by JavaScript -->
-        </div>
-    </div>
+        <header>
+            <div class="logo">SECTOR SCOPE</div>
+            <div class="tagline">Indian Stock Market Sector Analysis</div>
+        </header>
 
-    <!-- Stock Table -->
-    <div class="container">
-        <div class="stock-table-container">
-            <div class="table-header">
-                <h2 class="table-title" id="table-title">Sector Performance Analysis</h2>
-                <input type="text" class="search-box" placeholder="Search sectors..." id="search-input">
+        <!-- Overall Sector Ranking -->
+        <div class="overall-ranking">
+            <h2 class="overall-title">Overall Sector Sentiment Ranking</h2>
+            
+            <div class="ranking-row" data-sector="fmcg">
+                <div class="sector-name-col">FMCG</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 92%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">92%</div>
+                </div>
             </div>
             
-            <table id="stocks-table">
+            <div class="ranking-row" data-sector="sensex">
+                <div class="sector-name-col">SENSEX</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 85%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">85%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="pharma">
+                <div class="sector-name-col">PHARMA</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 82%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">82%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="nifty-midselect">
+                <div class="sector-name-col">NIFTY MIDSELECT</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">75%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="bank">
+                <div class="sector-name-col">BANK</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 70%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">70%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="nifty-50">
+                <div class="sector-name-col">NIFTY 50</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 68%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">68%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="fin-service">
+                <div class="sector-name-col">FIN SERVICE</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 65%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">65%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="psu-bank">
+                <div class="sector-name-col">PSU BANK</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">60%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="auto">
+                <div class="sector-name-col">AUTO</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 55%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">55%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="it">
+                <div class="sector-name-col">IT</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bullish-fill" style="width: 50%"></div>
+                    </div>
+                    <div class="sentiment-percent bullish-percent">50%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="reality">
+                <div class="sector-name-col">REALITY</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bearish-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="sentiment-percent bearish-percent">45%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="metal">
+                <div class="sector-name-col">METAL</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bearish-fill" style="width: 40%"></div>
+                    </div>
+                    <div class="sentiment-percent bearish-percent">40%</div>
+                </div>
+            </div>
+            
+            <div class="ranking-row" data-sector="energy">
+                <div class="sector-name-col">ENERGY</div>
+                <div class="sentiment-bar-col">
+                    <div class="sentiment-bar-container">
+                        <div class="sentiment-fill bearish-fill" style="width: 35%"></div>
+                    </div>
+                    <div class="sentiment-percent bearish-percent">35%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sector Details Section (Initially Hidden) -->
+        <div class="sector-details" id="sector-details">
+            <div class="sector-details-header">
+                <div class="sector-details-title" id="details-title">Sector Details</div>
+                <button class="back-button" id="back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Rankings
+                </button>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-label">
+                    <span>Sort by Change %:</span>
+                    <select class="filter-select" id="change-filter">
+                        <option value="default">Default (Most Bullish)</option>
+                        <option value="high-low">High to Low</option>
+                        <option value="low-high">Low to High</option>
+                    </select>
+                </div>
+            </div>
+            
+            <table class="stocks-list-view" id="stocks-list-view">
                 <thead>
                     <tr>
-                        <th class="sortable sorted-asc">Sector</th>
-                        <th class="sortable">Index</th>
-                        <th class="sortable">Current Value</th>
-                        <th class="sortable">1D Change</th>
-                        <th class="sortable">7D Change</th>
-                        <th class="sortable">Sentiment</th>
-                        <th>Bull/Bear Ratio</th>
-                        <th>Action</th>
+                        <th>Symbol</th>
+                        <th>Company Name</th>
+                        <th>Current Price</th>
+                        <th>Change %</th>
                     </tr>
                 </thead>
-                <tbody id="stocks-table-body">
-                    <!-- Sector data will be populated by JavaScript -->
+                <tbody id="stocks-list-body">
+                    <!-- Stocks will be populated here -->
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <!-- Chart Section -->
-    <div class="container chart-section">
-        <div class="chart-header">
-            <h2 class="chart-title">Sector Sentiment Ranking</h2>
-            <div class="chart-controls">
-                <button class="time-filter active" data-period="1d">1 Day</button>
-                <button class="time-filter" data-period="7d">7 Days</button>
-            </div>
-        </div>
-        <div class="chart-container">
-            <div id="performance-chart">
-                <canvas id="sector-performance-chart"></canvas>
-            </div>
+        <div class="footer">
+            <p>Sector Scope - Indian Stock Market Analysis | Updated: Today at 10:30 AM IST</p>
+            <p>Data sourced from NSE & BSE | For informational purposes only</p>
         </div>
     </div>
-
-    <!-- Disclaimer -->
-    <div class="container">
-        <div class="disclaimer">
-            <h4><i class="fas fa-exclamation-triangle"></i> Important Disclaimer</h4>
-            <p>This website is for personal use only and provides analysis based on publicly available data. Trading in securities involves risks and may result in partial or complete loss of invested capital. The information provided should not be considered as investment advice. Always do your own research before making any investment decisions.</p>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Indian Sector Analysis</h3>
-                    <p>Specialized analysis of key sectors in the Indian equity market with real-time data and actionable insights.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Data Sources</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">NSE Official Data</a></li>
-                        <li><a href="#">BSE Market Feed</a></li>
-                        <li><a href="#">Economic Times</a></li>
-                        <li><a href="#">MoneyControl</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Sector Categories</h3>
-                    <ul class="footer-links" id="sector-footer-links">
-                        <!-- Sector links will be populated by JavaScript -->
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Market Calendar</a></li>
-                        <li><a href="#">Earnings Reports</a></li>
-                        <li><a href="#">Sector Rotation</a></li>
-                        <li><a href="#">Market Outlook</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                <p>&copy; 2023 Indian Sector Analysis. All Rights Reserved. For Personal Use Only.</p>
-                <p>Designed for Indian Stock Market Analysis. Not for commercial distribution.</p>
-            </div>
-        </div>
-    </footer>
 
     <script>
-        // Define the sectors
-        const sectors = [
-            "FMCG", "SENSEX", "PHARMA", "PVT BANK", 
-            "CEMENT", "NIFTY MIDSELECT", "BANK", "NIFTY 50", 
-            "FIN SERVICE", "PSU BANK", "AUTO", "IT", 
-            "REALITY", "METAL", "ENERGY"
-        ];
-
-        // Sample data for sector performance
+        // Sector data with all stocks
         const sectorData = {
-            "FMCG": { 
-                index: "NIFTY FMCG", 
-                value: 45678.90, 
-                change1d: 1.25, 
-                change7d: 3.45,
-                bullishCount: 12,
-                bearishCount: 5,
-                sentiment: "Bullish"
+            fmcg: {
+                name: "FMCG",
+                stocks: [
+                    { symbol: "VBL", name: "Varun Beverages Ltd", price: "₹789.45", change: "+1.2%", positive: true },
+                    { symbol: "NYKAA", name: "FSN E-Commerce Ventures", price: "₹1,234.56", change: "-0.8%", positive: false },
+                    { symbol: "DMART", name: "Avenue Supermarts", price: "₹3,456.78", change: "+3.4%", positive: true },
+                    { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd", price: "₹2,456.70", change: "+0.9%", positive: true },
+                    { symbol: "TATACONSUM", name: "Tata Consumer Products", price: "₹789.12", change: "+1.6%", positive: true },
+                    { symbol: "KALYANKJIL", name: "Kalyan Jewellers", price: "₹456.78", change: "-0.4%", positive: false },
+                    { symbol: "COLPAL", name: "Colgate Palmolive", price: "₹1,678.90", change: "+0.9%", positive: true },
+                    { symbol: "NESTLEIND", name: "Nestle India Ltd", price: "₹22,345.60", change: "+0.5%", positive: true },
+                    { symbol: "BRITANNIA", name: "Britannia Industries", price: "₹4,567.89", change: "+2.1%", positive: true },
+                    { symbol: "GODREJCP", name: "Godrej Consumer", price: "₹987.65", change: "-0.2%", positive: false },
+                    { symbol: "ETERNAL", name: "Eternal Estates", price: "₹123.45", change: "+1.9%", positive: true },
+                    { symbol: "ITC", name: "ITC Ltd", price: "₹456.70", change: "+0.7%", positive: true },
+                    { symbol: "MARICO", name: "Marico Ltd", price: "₹567.89", change: "+1.3%", positive: true },
+                    { symbol: "UNITDSPR", name: "United Spirits", price: "₹890.12", change: "-0.6%", positive: false },
+                    { symbol: "DABUR", name: "Dabur India Ltd", price: "₹567.45", change: "+0.9%", positive: true },
+                    { symbol: "PATANJALI", name: "Patanjali Foods", price: "₹234.56", change: "+2.3%", positive: true },
+                    { symbol: "SUPREMEIND", name: "Supreme Industries", price: "₹1,789.01", change: "-0.8%", positive: false }
+                ]
             },
-            "SENSEX": { 
-                index: "SENSEX", 
-                value: 66723.45, 
-                change1d: 0.62, 
-                change7d: 2.15,
-                bullishCount: 18,
-                bearishCount: 12,
-                sentiment: "Neutral"
+            sensex: {
+                name: "SENSEX",
+                stocks: [
+                    { symbol: "TCS", name: "Tata Consultancy Services", price: "₹3,456.20", change: "+0.9%", positive: true },
+                    { symbol: "INFY", name: "Infosys Ltd", price: "₹1,456.80", change: "+0.7%", positive: true },
+                    { symbol: "TITAN", name: "Titan Company Ltd", price: "₹3,456.78", change: "-0.9%", positive: false },
+                    { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank", price: "₹1,876.45", change: "+1.2%", positive: true },
+                    { symbol: "BAJFINANCE", name: "Bajaj Finance Ltd", price: "₹7,654.32", change: "+2.9%", positive: true },
+                    { symbol: "SBIN", name: "State Bank of India", price: "₹623.15", change: "+1.0%", positive: true },
+                    { symbol: "TECHM", name: "Tech Mahindra", price: "₹1,234.56", change: "-0.4%", positive: false },
+                    { symbol: "BAJAJFINSV", name: "Bajaj Finserv", price: "₹1,789.01", change: "+1.6%", positive: true },
+                    { symbol: "M&M", name: "Mahindra & Mahindra", price: "₹1,234.56", change: "+1.7%", positive: true },
+                    { symbol: "RELIANCE", name: "Reliance Industries", price: "₹2,456.75", change: "+2.2%", positive: true },
+                    { symbol: "INDUSINDBK", name: "IndusInd Bank", price: "₹1,123.45", change: "-0.3%", positive: false },
+                    { symbol: "NTPC", name: "NTPC Ltd", price: "₹234.56", change: "-0.5%", positive: false },
+                    { symbol: "BHARTIARTL", name: "Bharti Airtel", price: "₹876.50", change: "+2.3%", positive: true },
+                    { symbol: "LT", name: "Larsen & Toubro", price: "₹2,123.45", change: "+1.9%", positive: true },
+                    { symbol: "ADANIPORTS", name: "Adani Ports", price: "₹789.01", change: "-1.2%", positive: false },
+                    { symbol: "TMPV", name: "TeamLease Services", price: "₹3,456.78", change: "+0.8%", positive: true },
+                    { symbol: "POWERGRID", name: "Power Grid Corp", price: "₹234.56", change: "+0.8%", positive: true },
+                    { symbol: "ASIANPAINT", name: "Asian Paints", price: "₹3,210.90", change: "+0.5%", positive: true },
+                    { symbol: "ULTRACEMCO", name: "UltraTech Cement", price: "₹8,765.43", change: "+1.2%", positive: true },
+                    { symbol: "MARUTI", name: "Maruti Suzuki", price: "₹9,876.50", change: "+2.2%", positive: true },
+                    { symbol: "HCLTECH", name: "HCL Technologies", price: "₹1,234.56", change: "-0.2%", positive: false },
+                    { symbol: "SUNPHARMA", name: "Sun Pharmaceutical", price: "₹1,123.45", change: "+1.6%", positive: true },
+                    { symbol: "ITC", name: "ITC Ltd", price: "₹456.70", change: "+0.7%", positive: true },
+                    { symbol: "AXISBANK", name: "Axis Bank Ltd", price: "₹987.65", change: "+1.2%", positive: true },
+                    { symbol: "TATASTEEL", name: "Tata Steel Ltd", price: "₹123.45", change: "-0.9%", positive: false },
+                    { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: "₹987.45", change: "+1.6%", positive: true },
+                    { symbol: "NESTLEIND", name: "Nestle India Ltd", price: "₹22,345.60", change: "+0.5%", positive: true },
+                    { symbol: "JSWSTEEL", name: "JSW Steel Ltd", price: "₹789.01", change: "+1.3%", positive: true },
+                    { symbol: "HINDUNILVR", name: "Hindustan Unilever", price: "₹2,456.70", change: "+0.9%", positive: true },
+                    { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: "₹1,543.60", change: "-0.5%", positive: false }
+                ]
             },
-            "PHARMA": { 
-                index: "NIFTY PHARMA", 
-                value: 12345.67, 
-                change1d: -0.45, 
-                change7d: -1.85,
-                bullishCount: 7,
-                bearishCount: 10,
-                sentiment: "Bearish"
+            pharma: {
+                name: "PHARMA",
+                stocks: [
+                    { symbol: "PPLPHARMA", name: "Piramal Pharma", price: "₹123.45", change: "+1.2%", positive: true },
+                    { symbol: "TORNTPHARM", name: "Torrent Pharma", price: "₹2,345.67", change: "-0.5%", positive: false },
+                    { symbol: "MANKIND", name: "Mankind Pharma", price: "₹1,234.56", change: "+2.3%", positive: true },
+                    { symbol: "FORTIS", name: "Fortis Healthcare", price: "₹345.67", change: "+0.7%", positive: true },
+                    { symbol: "ALKEM", name: "Alkem Labs", price: "₹3,456.78", change: "+1.6%", positive: true },
+                    { symbol: "SUNPHARMA", name: "Sun Pharmaceutical", price: "₹1,123.45", change: "+1.6%", positive: true },
+                    { symbol: "DIVISLAB", name: "Divi's Labs", price: "₹4,567.89", change: "-0.2%", positive: false },
+                    { symbol: "LUPIN", name: "Lupin Ltd", price: "₹890.12", change: "+0.9%", positive: true },
+                    { symbol: "CIPLA", name: "Cipla Ltd", price: "₹1,234.56", change: "-0.2%", positive: false },
+                    { symbol: "GLENMARK", name: "Glenmark Pharma", price: "₹456.78", change: "+1.3%", positive: true },
+                    { symbol: "BIOCON", name: "Biocon Ltd", price: "₹567.89", change: "-0.7%", positive: false },
+                    { symbol: "LAURUSLABS", name: "Laurus Labs", price: "₹345.67", change: "+2.1%", positive: true },
+                    { symbol: "DRREDDY", name: "Dr Reddy's Labs", price: "₹5,432.10", change: "-0.7%", positive: false },
+                    { symbol: "ZYDUSLIFE", name: "Zydus Lifesciences", price: "₹456.78", change: "+0.9%", positive: true },
+                    { symbol: "AUROPHARMA", name: "Aurobindo Pharma", price: "₹789.01", change: "+1.2%", positive: true }
+                ]
             },
-            "PVT BANK": { 
-                index: "NIFTY PVT BANK", 
-                value: 23456.78, 
-                change1d: 1.87, 
-                change7d: 4.23,
-                bullishCount: 15,
-                bearishCount: 2,
-                sentiment: "Strong Bullish"
+            "nifty-midselect": {
+                name: "NIFTY MIDSELECT",
+                stocks: [
+                    { symbol: "PIIND", name: "PI Industries", price: "₹3,456.78", change: "+1.2%", positive: true },
+                    { symbol: "MPHASIS", name: "Mphasis Ltd", price: "₹4,321.09", change: "+0.8%", positive: true },
+                    { symbol: "GODREJPROP", name: "Godrej Properties", price: "₹1,234.56", change: "+1.1%", positive: true },
+                    { symbol: "INDHOTEL", name: "Indian Hotels", price: "₹234.56", change: "-0.3%", positive: false },
+                    { symbol: "PAGEIND", name: "Page Industries", price: "₹41,234.56", change: "+0.9%", positive: true },
+                    { symbol: "IDFCFIRSTB", name: "IDFC First Bank", price: "₹67.89", change: "+1.2%", positive: true },
+                    { symbol: "COFORGE", name: "Coforge Ltd", price: "₹5,678.90", change: "+1.5%", positive: true },
+                    { symbol: "AUBANK", name: "AU Small Finance", price: "₹789.01", change: "+0.9%", positive: true },
+                    { symbol: "FEDERALBNK", name: "Federal Bank", price: "₹123.45", change: "+0.8%", positive: true },
+                    { symbol: "AUROPHARMA", name: "Aurobindo Pharma", price: "₹789.01", change: "+1.2%", positive: true },
+                    { symbol: "CONCOR", name: "Container Corp", price: "₹567.89", change: "+0.7%", positive: true },
+                    { symbol: "LUPIN", name: "Lupin Ltd", price: "₹890.12", change: "+0.9%", positive: true },
+                    { symbol: "POLYCAB", name: "Polycab India", price: "₹2,345.67", change: "+1.3%", positive: true },
+                    { symbol: "PERSISTENT", name: "Persistent Systems", price: "₹4,567.89", change: "+0.9%", positive: true },
+                    { symbol: "CUMMINSIND", name: "Cummins India", price: "₹1,234.56", change: "+0.8%", positive: true },
+                    { symbol: "BHARATFORG", name: "Bharat Forge", price: "₹789.01", change: "+2.3%", positive: true },
+                    { symbol: "JUBLFOOD", name: "Jubilant Foodworks", price: "₹456.78", change: "-0.5%", positive: false },
+                    { symbol: "HDFCAMC", name: "HDFC Asset Mgmt", price: "₹3,456.78", change: "+1.1%", positive: true },
+                    { symbol: "ASTRAL", name: "Astral Ltd", price: "₹1,789.01", change: "+1.2%", positive: true },
+                    { symbol: "UPL", name: "UPL Ltd", price: "₹678.90", change: "-0.4%", positive: false },
+                    { symbol: "HINDPETRO", name: "Hindustan Petrol", price: "₹234.56", change: "+0.6%", positive: true },
+                    { symbol: "RVNL", name: "Rail Vikas Nigam", price: "₹45.67", change: "+0.5%", positive: true },
+                    { symbol: "VOLTAS", name: "Voltas Ltd", price: "₹987.65", change: "+0.8%", positive: true },
+                    { symbol: "ASHOKLEY", name: "Ashok Leyland", price: "₹178.90", change: "+0.8%", positive: true }
+                ]
             },
-            "CEMENT": { 
-                index: "NIFTY CEMENT", 
-                value: 34567.89, 
-                change1d: 0.98, 
-                change7d: 2.67,
-                bullishCount: 10,
-                bearishCount: 7,
-                sentiment: "Bullish"
+            bank: {
+                name: "BANK",
+                stocks: [
+                    { symbol: "BANKBARODA", name: "Bank of Baroda", price: "₹123.45", change: "-0.4%", positive: false },
+                    { symbol: "INDIANB", name: "Indian Bank", price: "₹98.76", change: "+0.3%", positive: true },
+                    { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank", price: "₹1,876.45", change: "+1.2%", positive: true },
+                    { symbol: "PNB", name: "Punjab National Bank", price: "₹56.78", change: "-0.5%", positive: false },
+                    { symbol: "IDFCFIRSTB", name: "IDFC First Bank", price: "₹67.89", change: "+1.2%", positive: true },
+                    { symbol: "BANKINDIA", name: "Bank of India", price: "₹78.90", change: "-0.2%", positive: false },
+                    { symbol: "SBIN", name: "State Bank of India", price: "₹623.15", change: "+1.0%", positive: true },
+                    { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: "₹987.45", change: "+1.6%", positive: true },
+                    { symbol: "CANBK", name: "Canara Bank", price: "₹98.76", change: "+0.3%", positive: true },
+                    { symbol: "AUBANK", name: "AU Small Finance", price: "₹789.01", change: "+0.9%", positive: true },
+                    { symbol: "FEDERALBNK", name: "Federal Bank", price: "₹123.45", change: "+0.8%", positive: true },
+                    { symbol: "AXISBANK", name: "Axis Bank Ltd", price: "₹987.65", change: "+1.2%", positive: true },
+                    { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: "₹1,543.60", change: "-0.5%", positive: false },
+                    { symbol: "INDUSINDBK", name: "IndusInd Bank", price: "₹1,123.45", change: "-0.3%", positive: false }
+                ]
             },
-            "NIFTY MIDSELECT": { 
-                index: "NIFTY MIDSELECT", 
-                value: 15678.90, 
-                change1d: 1.56, 
-                change7d: 3.89,
-                bullishCount: 14,
-                bearishCount: 3,
-                sentiment: "Bullish"
+            "nifty-50": {
+                name: "NIFTY 50",
+                stocks: [
+                    { symbol: "ADANIPORTS", name: "Adani Ports", price: "₹789.01", change: "-1.2%", positive: false },
+                    { symbol: "TMPV", name: "TeamLease Services", price: "₹3,456.78", change: "+0.8%", positive: true },
+                    { symbol: "SHRIRAMFIN", name: "Shriram Finance", price: "₹1,789.01", change: "+1.5%", positive: true },
+                    { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank", price: "₹1,876.45", change: "+1.2%", positive: true },
+                    { symbol: "EICHERMOT", name: "Eicher Motors", price: "₹3,456.78", change: "+1.9%", positive: true },
+                    { symbol: "ETERNAL", name: "Eternal Estates", price: "₹123.45", change: "+1.9%", positive: true },
+                    { symbol: "BAJAJ-AUTO", name: "Bajaj Auto", price: "₹4,321.80", change: "-1.1%", positive: false },
+                    { symbol: "BEL", name: "Bharat Electronics", price: "₹123.45", change: "+0.8%", positive: true },
+                    { symbol: "HCLTECH", name: "HCL Technologies", price: "₹1,234.56", change: "-0.2%", positive: false },
+                    { symbol: "HINDALCO", name: "Hindalco Industries", price: "₹456.78", change: "+0.7%", positive: true },
+                    { symbol: "ADANIENT", name: "Adani Enterprises", price: "₹1,234.56", change: "-2.3%", positive: false },
+                    { symbol: "JSWSTEEL", name: "JSW Steel Ltd", price: "₹789.01", change: "+1.3%", positive: true },
+                    { symbol: "ONGC", name: "Oil & Natural Gas", price: "₹123.45", change: "+0.6%", positive: true },
+                    { symbol: "BHARTIARTL", name: "Bharti Airtel", price: "₹876.50", change: "+2.3%", positive: true },
+                    { symbol: "SBIN", name: "State Bank of India", price: "₹623.15", change: "+1.0%", positive: true },
+                    { symbol: "HINDUNILVR", name: "Hindustan Unilever", price: "₹2,456.70", change: "+0.9%", positive: true },
+                    { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: "₹987.45", change: "+1.6%", positive: true },
+                    { symbol: "MARUTI", name: "Maruti Suzuki", price: "₹9,876.50", change: "+2.2%", positive: true },
+                    { symbol: "LT", name: "Larsen & Toubro", price: "₹2,123.45", change: "+1.9%", positive: true },
+                    { symbol: "TATASTEEL", name: "Tata Steel Ltd", price: "₹123.45", change: "-0.9%", positive: false },
+                    { symbol: "RELIANCE", name: "Reliance Industries", price: "₹2,456.75", change: "+2.2%", positive: true },
+                    { symbol: "M&M", name: "Mahindra & Mahindra", price: "₹1,234.56", change: "+1.7%", positive: true },
+                    { symbol: "WIPRO", name: "Wipro Ltd", price: "₹432.10", change: "-0.3%", positive: false },
+                    { symbol: "APOLLOHOSP", name: "Apollo Hospitals", price: "₹4,567.89", change: "+1.3%", positive: true },
+                    { symbol: "POWERGRID", name: "Power Grid Corp", price: "₹234.56", change: "+0.8%", positive: true },
+                    { symbol: "COALINDIA", name: "Coal India Ltd", price: "₹345.67", change: "+0.9%", positive: true },
+                    { symbol: "TECHM", name: "Tech Mahindra", price: "₹1,234.56", change: "-0.4%", positive: false },
+                    { symbol: "HDFCLIFE", name: "HDFC Life Insurance", price: "₹654.32", change: "+0.8%", positive: true },
+                    { symbol: "TRENT", name: "Trent Ltd", price: "₹1,234.56", change: "+0.7%", positive: true },
+                    { symbol: "JIOFIN", name: "Jio Financial", price: "₹123.45", change: "+1.5%", positive: true },
+                    { symbol: "GRASIM", name: "Grasim Industries", price: "₹1,789.01", change: "+0.8%", positive: true },
+                    { symbol: "AXISBANK", name: "Axis Bank Ltd", price: "₹987.65", change: "+1.2%", positive: true },
+                    { symbol: "INFY", name: "Infosys Ltd", price: "₹1,456.80", change: "+0.7%", positive: true },
+                    { symbol: "MAXHEALTH", name: "Max Healthcare", price: "₹123.45", change: "-0.3%", positive: false },
+                    { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: "₹1,543.60", change: "-0.5%", positive: false },
+                    { symbol: "BAJAJFINSV", name: "Bajaj Finserv", price: "₹1,789.01", change: "+1.6%", positive: true },
+                    { symbol: "NTPC", name: "NTPC Ltd", price: "₹234.56", change: "-0.5%", positive: false },
+                    { symbol: "ULTRACEMCO", name: "UltraTech Cement", price: "₹8,765.43", change: "+1.2%", positive: true },
+                    { symbol: "CIPLA", name: "Cipla Ltd", price: "₹1,234.56", change: "-0.2%", positive: false },
+                    { symbol: "DRREDDY", name: "Dr Reddy's Labs", price: "₹5,432.10", change: "-0.7%", positive: false },
+                    { symbol: "SBILIFE", name: "SBI Life Insurance", price: "₹1,234.56", change: "+1.2%", positive: true },
+                    { symbol: "NESTLEIND", name: "Nestle India Ltd", price: "₹22,345.60", change: "+0.5%", positive: true },
+                    { symbol: "INDIGO", name: "InterGlobe Aviation", price: "₹2,345.67", change: "+1.3%", positive: true },
+                    { symbol: "BAJFINANCE", name: "Bajaj Finance", price: "₹7,654.32", change: "+2.9%", positive: true },
+                    { symbol: "ASIANPAINT", name: "Asian Paints", price: "₹3,210.90", change: "+0.5%", positive: true },
+                    { symbol: "SUNPHARMA", name: "Sun Pharmaceutical", price: "₹1,123.45", change: "+1.6%", positive: true },
+                    { symbol: "ITC", name: "ITC Ltd", price: "₹456.70", change: "+0.7%", positive: true },
+                    { symbol: "TATACONSUM", name: "Tata Consumer", price: "₹789.12", change: "+1.6%", positive: true },
+                    { symbol: "TITAN", name: "Titan Company", price: "₹3,456.78", change: "-0.9%", positive: false },
+                    { symbol: "TCS", name: "Tata Consultancy", price: "₹3,456.20", change: "+0.9%", positive: true }
+                ]
             },
-            "BANK": { 
-                index: "NIFTY BANK", 
-                value: 45678.90, 
-                change1d: 1.23, 
-                change7d: 3.12,
-                bullishCount: 16,
-                bearishCount: 4,
-                sentiment: "Bullish"
+            "fin-service": {
+                name: "FIN SERVICE",
+                stocks: [
+                    { symbol: "BAJFINANCE", name: "Bajaj Finance", price: "₹7,654.32", change: "+2.9%", positive: true },
+                    { symbol: "RECLTD", name: "REC Ltd", price: "₹123.45", change: "+0.8%", positive: true },
+                    { symbol: "POLICYBZR", name: "Policybazaar", price: "₹987.65", change: "+1.5%", positive: true },
+                    { symbol: "SHRIRAMFIN", name: "Shriram Finance", price: "₹1,789.01", change: "+1.5%", positive: true },
+                    { symbol: "BAJAJFINSV", name: "Bajaj Finserv", price: "₹1,789.01", change: "+1.6%", positive: true },
+                    { symbol: "ICICIBANK", name: "ICICI Bank", price: "₹987.45", change: "+1.6%", positive: true },
+                    { symbol: "MUTHOOTFIN", name: "Muthoot Finance", price: "₹1,234.56", change: "+0.9%", positive: true },
+                    { symbol: "CHOLAFIN", name: "Cholamandalam", price: "₹987.65", change: "+0.7%", positive: true },
+                    { symbol: "BSE", name: "BSE Ltd", price: "₹123.45", change: "+0.5%", positive: true },
+                    { symbol: "HDFCBANK", name: "HDFC Bank", price: "₹1,543.60", change: "-0.5%", positive: false },
+                    { symbol: "PFC", name: "Power Finance Corp", price: "₹123.45", change: "+0.7%", positive: true },
+                    { symbol: "PAYTM", name: "One97 Comm", price: "₹654.32", change: "-0.8%", positive: false },
+                    { symbol: "ICICIPRULI", name: "ICICI Pru Life", price: "₹789.01", change: "+0.6%", positive: true },
+                    { symbol: "NUVAMA", name: "Nuvama Wealth", price: "₹1,234.56", change: "+1.2%", positive: true },
+                    { symbol: "SBICARD", name: "SBI Cards", price: "₹987.65", change: "+0.9%", positive: true },
+                    { symbol: "HUDCO", name: "Housing Dev Fin", price: "₹123.45", change: "+0.6%", positive: true },
+                    { symbol: "ANGELONE", name: "Angel One", price: "₹456.78", change: "+1.1%", positive: true },
+                    { symbol: "MAXHEALTH", name: "Max Healthcare", price: "₹123.45", change: "-0.3%", positive: false },
+                    { symbol: "LICI", name: "Life Ins Corp", price: "₹789.01", change: "+0.8%", positive: true },
+                    { symbol: "CDSL", name: "Central Depository", price: "₹567.89", change: "+0.7%", positive: true },
+                    { symbol: "AXISBANK", name: "Axis Bank", price: "₹987.65", change: "+1.2%", positive: true },
+                    { symbol: "IRFC", name: "Indian Railway Fin", price: "₹123.45", change: "+0.9%", positive: true },
+                    { symbol: "IIFL", name: "IIFL Finance", price: "₹456.78", change: "+0.8%", positive: true },
+                    { symbol: "JIOFIN", name: "Jio Financial", price: "₹123.45", change: "+1.5%", positive: true },
+                    { symbol: "PNBHOUSING", name: "PNB Housing Fin", price: "₹456.78", change: "-0.3%", positive: false },
+                    { symbol: "HDFCAMC", name: "HDFC Asset Mgmt", price: "₹3,456.78", change: "+1.1%", positive: true },
+                    { symbol: "SBIN", name: "State Bank", price: "₹623.15", change: "+1.0%", positive: true },
+                    { symbol: "LICHSGFIN", name: "LIC Housing Fin", price: "₹123.45", change: "+0.5%", positive: true },
+                    { symbol: "HDFCLIFE", name: "HDFC Life", price: "₹654.32", change: "+0.8%", positive: true },
+                    { symbol: "SAMMAANCAP", name: "Sammaan Capital", price: "₹12.34", change: "+1.5%", positive: true },
+                    { symbol: "SBILIFE", name: "SBI Life", price: "₹1,234.56", change: "+1.2%", positive: true }
+                ]
             },
-            "NIFTY 50": { 
-                index: "NIFTY 50", 
-                value: 19845.25, 
-                change1d: 0.85, 
-                change7d: 2.45,
-                bullishCount: 25,
-                bearishCount: 5,
-                sentiment: "Bullish"
+            "psu-bank": {
+                name: "PSU BANK",
+                stocks: [
+                    { symbol: "INDIANB", name: "Indian Bank", price: "₹98.76", change: "+0.3%", positive: true },
+                    { symbol: "SBIN", name: "State Bank of India", price: "₹623.15", change: "+1.0%", positive: true },
+                    { symbol: "UNIONBANK", name: "Union Bank", price: "₹87.65", change: "-0.1%", positive: false },
+                    { symbol: "PNB", name: "Punjab National Bank", price: "₹56.78", change: "-0.5%", positive: false },
+                    { symbol: "BANKINDIA", name: "Bank of India", price: "₹78.90", change: "-0.2%", positive: false },
+                    { symbol: "BANKBARODA", name: "Bank of Baroda", price: "₹123.45", change: "-0.4%", positive: false },
+                    { symbol: "CANBK", name: "Canara Bank", price: "₹98.76", change: "+0.3%", positive: true }
+                ]
             },
-            "FIN SERVICE": { 
-                index: "NIFTY FIN SERVICE", 
-                value: 23456.78, 
-                change1d: 1.12, 
-                change7d: 3.21,
-                bullishCount: 13,
-                bearishCount: 4,
-                sentiment: "Bullish"
+            auto: {
+                name: "AUTO",
+                stocks: [
+                    { symbol: "SONACOMS", name: "Sona BLW Precision", price: "₹456.78", change: "+1.2%", positive: true },
+                    { symbol: "EXIDEIND", name: "Exide Industries", price: "₹234.56", change: "+0.8%", positive: true },
+                    { symbol: "MOTHERSON", name: "Samvardhana Motherson", price: "₹123.45", change: "-0.3%", positive: false },
+                    { symbol: "TVSMOTOR", name: "TVS Motor", price: "₹1,234.56", change: "+1.5%", positive: true },
+                    { symbol: "M&M", name: "Mahindra & Mahindra", price: "₹1,234.56", change: "+1.7%", positive: true },
+                    { symbol: "TITAGARH", name: "Titagarh Rail Systems", price: "₹456.78", change: "+0.9%", positive: true },
+                    { symbol: "MARUTI", name: "Maruti Suzuki", price: "₹9,876.50", change: "+2.2%", positive: true },
+                    { symbol: "BAJAJ-AUTO", name: "Bajaj Auto", price: "₹4,321.80", change: "-1.1%", positive: false },
+                    { symbol: "TMPV", name: "TeamLease Services", price: "₹3,456.78", change: "+0.8%", positive: true },
+                    { symbol: "HEROMOTOCO", name: "Hero MotoCorp", price: "₹4,567.89", change: "+1.6%", positive: true },
+                    { symbol: "BHARATFORG", name: "Bharat Forge", price: "₹789.01", change: "+2.3%", positive: true },
+                    { symbol: "UNOMINDA", name: "Uno Minda", price: "₹456.78", change: "+0.7%", positive: true },
+                    { symbol: "BOSCHLTD", name: "Bosch Ltd", price: "₹15,678.90", change: "+0.8%", positive: true },
+                    { symbol: "EICHERMOT", name: "Eicher Motors", price: "₹3,456.78", change: "+1.9%", positive: true },
+                    { symbol: "TIINDIA", name: "Tube Investments", price: "₹4,567.89", change: "+1.2%", positive: true },
+                    { symbol: "ASHOKLEY", name: "Ashok Leyland", price: "₹178.90", change: "+0.8%", positive: true }
+                ]
             },
-            "PSU BANK": { 
-                index: "NIFTY PSU BANK", 
-                value: 34567.89, 
-                change1d: -0.67, 
-                change7d: -2.34,
-                bullishCount: 6,
-                bearishCount: 11,
-                sentiment: "Bearish"
+            it: {
+                name: "IT",
+                stocks: [
+                    { symbol: "TCS", name: "Tata Consultancy", price: "₹3,456.20", change: "+0.9%", positive: true },
+                    { symbol: "TATATECH", name: "Tata Technologies", price: "₹1,234.56", change: "+1.2%", positive: true },
+                    { symbol: "WIPRO", name: "Wipro Ltd", price: "₹432.10", change: "-0.3%", positive: false },
+                    { symbol: "MPHASIS", name: "Mphasis Ltd", price: "₹4,321.09", change: "+0.8%", positive: true },
+                    { symbol: "LTIM", name: "LTIMindtree", price: "₹4,567.89", change: "+1.3%", positive: true },
+                    { symbol: "CAMS", name: "Computer Age Mgmt", price: "₹1,789.01", change: "+0.9%", positive: true },
+                    { symbol: "TECHM", name: "Tech Mahindra", price: "₹1,234.56", change: "-0.4%", positive: false },
+                    { symbol: "COFORGE", name: "Coforge Ltd", price: "₹5,678.90", change: "+1.5%", positive: true },
+                    { symbol: "PERSISTENT", name: "Persistent Systems", price: "₹4,567.89", change: "+0.9%", positive: true },
+                    { symbol: "KPITTECH", name: "KPIT Technologies", price: "₹456.78", change: "+1.1%", positive: true },
+                    { symbol: "HFCL", name: "HFCL Ltd", price: "₹123.45", change: "-0.2%", positive: false },
+                    { symbol: "HCLTECH", name: "HCL Technologies", price: "₹1,234.56", change: "-0.2%", positive: false },
+                    { symbol: "INFY", name: "Infosys Ltd", price: "₹1,456.80", change: "+0.7%", positive: true },
+                    { symbol: "TATAELXSI", name: "Tata Elxsi", price: "₹5,678.90", change: "+1.5%", positive: true },
+                    { symbol: "CYIENT", name: "Cyient Ltd", price: "₹987.65", change: "+0.8%", positive: true },
+                    { symbol: "KAYNES", name: "Kaynes Technology", price: "₹1,234.56", change: "+1.2%", positive: true },
+                    { symbol: "OFSS", name: "Oracle Financial", price: "₹5,678.90", change: "+0.8%", positive: true }
+                ]
             },
-            "AUTO": { 
-                index: "NIFTY AUTO", 
-                value: 12345.67, 
-                change1d: 2.34, 
-                change7d: 5.67,
-                bullishCount: 14,
-                bearishCount: 3,
-                sentiment: "Strong Bullish"
+            reality: {
+                name: "REALITY",
+                stocks: [
+                    { symbol: "LODHA", name: "Macrotech Developers", price: "₹1,234.56", change: "+1.2%", positive: true },
+                    { symbol: "PHOENIXLTD", name: "Phoenix Mills", price: "₹345.67", change: "+0.5%", positive: true },
+                    { symbol: "GODREJPROP", name: "Godrej Properties", price: "₹1,234.56", change: "+1.1%", positive: true },
+                    { symbol: "OBEROIRLTY", name: "Oberoi Realty", price: "₹876.54", change: "-0.5%", positive: false },
+                    { symbol: "NCC", name: "NCC Ltd", price: "₹123.45", change: "-0.3%", positive: false },
+                    { symbol: "DLF", name: "DLF Ltd", price: "₹456.78", change: "+0.9%", positive: true },
+                    { symbol: "NBCC", name: "NBCC India", price: "₹23.45", change: "+0.4%", positive: true },
+                    { symbol: "PRESTIGE", name: "Prestige Estates", price: "₹456.78", change: "+0.7%", positive: true }
+                ]
             },
-            "IT": { 
-                index: "NIFTY IT", 
-                value: 34567.89, 
-                change1d: 0.45, 
-                change7d: 1.23,
-                bullishCount: 9,
-                bearishCount: 8,
-                sentiment: "Neutral"
+            metal: {
+                name: "METAL",
+                stocks: [
+                    { symbol: "JSWSTEEL", name: "JSW Steel Ltd", price: "₹789.01", change: "+1.3%", positive: true },
+                    { symbol: "SAIL", name: "Steel Authority", price: "₹123.45", change: "-0.3%", positive: false },
+                    { symbol: "VEDL", name: "Vedanta Ltd", price: "₹178.90", change: "+1.3%", positive: true },
+                    { symbol: "JINDALSTEL", name: "Jindal Steel", price: "₹234.56", change: "+0.6%", positive: true },
+                    { symbol: "HINDZINC", name: "Hindustan Zinc", price: "₹345.67", change: "+0.8%", positive: true },
+                    { symbol: "TATASTEEL", name: "Tata Steel Ltd", price: "₹123.45", change: "-0.9%", positive: false },
+                    { symbol: "APLAPOLLO", name: "APL Apollo Tubes", price: "₹456.78", change: "+1.1%", positive: true },
+                    { symbol: "ADANIENT", name: "Adani Enterprises", price: "₹1,234.56", change: "-2.3%", positive: false },
+                    { symbol: "NATIONALUM", name: "National Alumina", price: "₹98.76", change: "+0.5%", positive: true },
+                    { symbol: "NMDC", name: "NMDC Ltd", price: "₹123.45", change: "+0.7%", positive: true },
+                    { symbol: "HINDALCO", name: "Hindalco Industries", price: "₹456.78", change: "+0.7%", positive: true }
+                ]
             },
-            "REALITY": { 
-                index: "NIFTY REALTY", 
-                value: 4567.89, 
-                change1d: -1.23, 
-                change7d: -3.45,
-                bullishCount: 4,
-                bearishCount: 13,
-                sentiment: "Bearish"
-            },
-            "METAL": { 
-                index: "NIFTY METAL", 
-                value: 56789.01, 
-                change1d: 2.78, 
-                change7d: 6.89,
-                bullishCount: 15,
-                bearishCount: 2,
-                sentiment: "Strong Bullish"
-            },
-            "ENERGY": { 
-                index: "NIFTY ENERGY", 
-                value: 23456.78, 
-                change1d: 1.45, 
-                change7d: 4.12,
-                bullishCount: 11,
-                bearishCount: 6,
-                sentiment: "Bullish"
+            energy: {
+                name: "ENERGY",
+                stocks: [
+                    { symbol: "ADANIENSOL", name: "Adani Energy", price: "₹1,234.56", change: "+2.3%", positive: true },
+                    { symbol: "ONGC", name: "Oil & Natural Gas", price: "₹123.45", change: "+0.6%", positive: true },
+                    { symbol: "POWERINDIA", name: "ABB Power Products", price: "₹234.56", change: "+0.8%", positive: true },
+                    { symbol: "JSWENERGY", name: "JSW Energy", price: "₹345.67", change: "+1.2%", positive: true },
+                    { symbol: "COALINDIA", name: "Coal India Ltd", price: "₹345.67", change: "+0.9%", positive: true },
+                    { symbol: "NTPC", name: "NTPC Ltd", price: "₹234.56", change: "-0.5%", positive: false },
+                    { symbol: "IGL", name: "Indraprastha Gas", price: "₹456.78", change: "+0.7%", positive: true },
+                    { symbol: "RELIANCE", name: "Reliance Industries", price: "₹2,456.75", change: "+2.2%", positive: true },
+                    { symbol: "SOLARINDS", name: "Solar Industries", price: "₹987.65", change: "+1.3%", positive: true },
+                    { symbol: "SUZLON", name: "Suzlon Energy", price: "₹34.56", change: "+2.1%", positive: true },
+                    { symbol: "IREDA", name: "IREDA", price: "₹123.45", change: "+0.9%", positive: true },
+                    { symbol: "BLUESTARCO", name: "Blue Star", price: "₹1,234.56", change: "+0.8%", positive: true },
+                    { symbol: "POWERGRID", name: "Power Grid Corp", price: "₹234.56", change: "+0.8%", positive: true },
+                    { symbol: "NHPC", name: "NHPC Ltd", price: "₹23.45", change: "+0.4%", positive: true },
+                    { symbol: "CGPOWER", name: "CG Power", price: "₹123.45", change: "-0.3%", positive: false },
+                    { symbol: "PETRONET", name: "Petronet LNG", price: "₹234.56", change: "+0.6%", positive: true },
+                    { symbol: "MAZDOCK", name: "Mazagon Dock", price: "₹987.65", change: "+0.9%", positive: true },
+                    { symbol: "IOC", name: "Indian Oil Corp", price: "₹123.45", change: "-0.8%", positive: false },
+                    { symbol: "BPCL", name: "Bharat Petroleum", price: "₹345.67", change: "+0.5%", positive: true },
+                    { symbol: "TATAPOWER", name: "Tata Power", price: "₹345.67", change: "+0.7%", positive: true },
+                    { symbol: "OIL", name: "Oil India", price: "₹234.56", change: "-0.4%", positive: false },
+                    { symbol: "ADANIGREEN", name: "Adani Green", price: "₹1,789.01", change: "-1.5%", positive: false },
+                    { symbol: "TORNTPOWER", name: "Torrent Power", price: "₹2,345.67", change: "+1.1%", positive: true },
+                    { symbol: "GMRAIRPORT", name: "GMR Airports", price: "₹123.45", change: "+0.8%", positive: true },
+                    { symbol: "INOXWIND", name: "Inox Wind", price: "₹45.67", change: "-0.5%", positive: false },
+                    { symbol: "BDL", name: "Bharat Dynamics", price: "₹456.78", change: "+1.2%", positive: true }
+                ]
             }
         };
 
-        // Sample stock data for sectors
-        const sectorStocks = {
-            "FMCG": [
-                { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd", price: 2456.70, change1d: 0.98, change7d: 3.45 },
-                { symbol: "NESTLEIND", name: "Nestle India Ltd", price: 22345.60, change1d: 0.45, change7d: 1.89 },
-                { symbol: "ITC", name: "ITC Ltd", price: 456.70, change1d: 0.67, change7d: 2.12 },
-                { symbol: "MARICO", name: "Marico Ltd", price: 567.89, change1d: 1.34, change7d: 4.23 },
-                { symbol: "DABUR", name: "Dabur India Ltd", price: 567.45, change1d: 0.89, change7d: 2.67 },
-                { symbol: "BRITANNIA", name: "Britannia Industries Ltd", price: 4567.89, change1d: 2.12, change7d: 5.12 },
-                { symbol: "COLPAL", name: "Colgate Palmolive", price: 1678.90, change1d: 0.89, change7d: 3.21 },
-                { symbol: "GODREJCP", name: "Godrej Consumer", price: 987.65, change1d: -0.23, change7d: 1.45 }
-            ],
-            "AUTO": [
-                { symbol: "MARUTI", name: "Maruti Suzuki India Ltd", price: 9876.50, change1d: 2.15, change7d: 5.67 },
-                { symbol: "TATAMOTORS", name: "Tata Motors Ltd", price: 654.30, change1d: 3.21, change7d: 6.89 },
-                { symbol: "M&M", name: "Mahindra & Mahindra", price: 1234.56, change1d: 1.67, change7d: 4.34 },
-                { symbol: "BAJAJ-AUTO", name: "Bajaj Auto Ltd", price: 4321.80, change1d: -1.05, change7d: 2.12 },
-                { symbol: "EICHERMOT", name: "Eicher Motors", price: 3456.78, change1d: 1.89, change7d: 4.56 },
-                { symbol: "ASHOKLEY", name: "Ashok Leyland", price: 178.90, change1d: 0.78, change7d: 2.34 },
-                { symbol: "HEROMOTOCO", name: "Hero MotoCorp", price: 4567.89, change1d: 1.56, change7d: 3.89 },
-                { symbol: "BHARATFORG", name: "Bharat Forge", price: 789.01, change1d: 2.34, change7d: 5.23 }
-            ],
-            "BANK": [
-                { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: 1543.60, change1d: -0.45, change7d: 1.23 },
-                { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: 987.45, change1d: 1.56, change7d: 3.45 },
-                { symbol: "SBIN", name: "State Bank of India", price: 623.15, change1d: 0.98, change7d: 2.67 },
-                { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank", price: 1876.45, change1d: 1.23, change7d: 3.12 },
-                { symbol: "AXISBANK", name: "Axis Bank Ltd", price: 987.65, change1d: 1.23, change7d: 2.45 },
-                { symbol: "INDUSINDBK", name: "IndusInd Bank", price: 1123.45, change1d: -0.34, change7d: 1.89 },
-                { symbol: "PNB", name: "Punjab National Bank", price: 56.78, change1d: 0.67, change7d: 1.23 },
-                { symbol: "BANKBARODA", name: "Bank of Baroda", price: 123.45, change1d: -0.45, change7d: 0.89 }
-            ],
-            "IT": [
-                { symbol: "TCS", name: "Tata Consultancy Services", price: 3456.20, change1d: 0.87, change7d: 2.12 },
-                { symbol: "INFY", name: "Infosys Ltd", price: 1456.80, change1d: 0.67, change7d: 1.89 },
-                { symbol: "WIPRO", name: "Wipro Ltd", price: 432.10, change1d: -0.34, change7d: 0.67 },
-                { symbol: "TECHM", name: "Tech Mahindra", price: 1234.56, change1d: -0.45, change7d: 1.23 },
-                { symbol: "HCLTECH", name: "HCL Technologies", price: 1234.56, change1d: -0.23, change7d: 1.45 },
-                { symbol: "LTIM", name: "LTIMindtree", price: 4567.89, change1d: 1.34, change7d: 3.21 },
-                { symbol: "MPHASIS", name: "Mphasis Ltd", price: 4321.09, change1d: 0.78, change7d: 2.34 },
-                { symbol: "COFORGE", name: "Coforge Ltd", price: 5678.90, change1d: 1.56, change7d: 4.12 }
-            ],
-            "PHARMA": [
-                { symbol: "SUNPHARMA", name: "Sun Pharmaceutical", price: 1123.45, change1d: 1.56, change7d: 4.23 },
-                { symbol: "DRREDDY", name: "Dr Reddy's Labs", price: 5432.10, change1d: -0.67, change7d: 1.89 },
-                { symbol: "CIPLA", name: "Cipla Ltd", price: 1234.56, change1d: -0.23, change7d: 1.23 },
-                { symbol: "LUPIN", name: "Lupin Ltd", price: 890.12, change1d: 0.89, change7d: 2.67 },
-                { symbol: "AUROPHARMA", name: "Aurobindo Pharma", price: 789.01, change1d: 1.23, change7d: 3.45 },
-                { symbol: "DIVISLAB", name: "Divi's Laboratories", price: 4567.89, change1d: -0.23, change7d: 2.12 },
-                { symbol: "ALKEM", name: "Alkem Laboratories", price: 3456.78, change1d: 1.56, change7d: 4.56 },
-                { symbol: "BIOCON", name: "Biocon Ltd", price: 567.89, change1d: -0.67, change7d: 1.45 }
-            ]
-        };
+        // DOM elements
+        const sectorDetails = document.getElementById('sector-details');
+        const detailsTitle = document.getElementById('details-title');
+        const stocksListBody = document.getElementById('stocks-list-body');
+        const backButton = document.getElementById('back-button');
+        const changeFilter = document.getElementById('change-filter');
 
-        // Function to populate sector tabs
-        function populateSectorTabs() {
-            const container = document.getElementById('sector-tabs-container');
-            container.innerHTML = '<button class="tab-btn active" data-sector="all">All Sectors</button>';
-            
-            sectors.forEach(sector => {
-                const button = document.createElement('button');
-                button.className = 'tab-btn';
-                button.dataset.sector = sector.toLowerCase().replace(/\s+/g, '-');
-                button.textContent = sector;
-                container.appendChild(button);
+        // Add click event to ranking rows
+        document.querySelectorAll('.ranking-row').forEach(row => {
+            row.addEventListener('click', function() {
+                const sectorKey = this.getAttribute('data-sector');
+                showSectorStocks(sectorKey);
             });
-        }
+        });
 
-        // Function to populate sector footer links
-        function populateSectorFooterLinks() {
-            const container = document.getElementById('sector-footer-links');
-            container.innerHTML = '';
-            
-            sectors.forEach(sector => {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = '#';
-                a.textContent = sector;
-                li.appendChild(a);
-                container.appendChild(li);
-            });
-        }
+        // Back button event
+        backButton.addEventListener('click', function() {
+            sectorDetails.style.display = 'none';
+        });
 
-        // Function to populate stock table with sector data
-        function populateStockTableWithSectors() {
-            const tbody = document.getElementById('stocks-table-body');
-            tbody.innerHTML = '';
-            
-            sectors.forEach(sector => {
-                const data = sectorData[sector];
-                const bullBearRatio = (data.bullishCount / (data.bullishCount + data.bearishCount) * 100).toFixed(1);
-                const row = document.createElement('tr');
-                row.dataset.sector = sector.toLowerCase().replace(/\s+/g, '-');
-                
-                row.innerHTML = `
-                    <td class="stock-symbol">${sector}</td>
-                    <td>${data.index}</td>
-                    <td>${data.value.toLocaleString('en-IN')}</td>
-                    <td class="${data.change1d >= 0 ? 'positive' : 'negative'}">${data.change1d >= 0 ? '+' : ''}${data.change1d}%</td>
-                    <td class="${data.change7d >= 0 ? 'positive' : 'negative'}">${data.change7d >= 0 ? '+' : ''}${data.change7d}%</td>
-                    <td><span class="signal-${data.sentiment.toLowerCase().replace(' ', '-')}">${data.sentiment}</span></td>
-                    <td>${bullBearRatio}%</td>
-                    <td><button class="btn-view-details" data-sector="${sector.toLowerCase().replace(/\s+/g, '-')}">View Stocks</button></td>
-                `;
-                
-                tbody.appendChild(row);
-            });
-            
-            // Add event listeners to view stocks buttons
-            document.querySelectorAll('.btn-view-details').forEach(button => {
-                button.addEventListener('click', function() {
-                    const sector = this.dataset.sector;
-                    showSectorStocks(sector);
-                });
-            });
-            
-            // Update table title
-            document.getElementById('table-title').textContent = 'Sector Performance Analysis';
-        }
+        // Change filter event
+        changeFilter.addEventListener('change', function() {
+            const sectorKey = sectorDetails.dataset.currentSector;
+            if (sectorKey) {
+                showSectorStocks(sectorKey);
+            }
+        });
 
-        // Function to show stocks for a specific sector
+        // Function to show sector stocks
         function showSectorStocks(sectorKey) {
-            const sectorName = sectors.find(s => s.toLowerCase().replace(/\s+/g, '-') === sectorKey);
-            if (!sectorName || !sectorStocks[sectorName]) {
-                alert("Stock data not available for this sector");
-                return;
+            const sector = sectorData[sectorKey];
+            if (!sector) return;
+
+            // Update details section
+            detailsTitle.textContent = `${sector.name} Sector Stocks`;
+            sectorDetails.dataset.currentSector = sectorKey;
+
+            // Get filter value
+            const filterValue = changeFilter.value;
+
+            // Create a copy of stocks for sorting
+            let stocks = [...sector.stocks];
+
+            // Apply sorting based on filter
+            if (filterValue === 'high-low') {
+                stocks.sort((a, b) => {
+                    const aChange = parseFloat(a.change.replace('%', '').replace('+', ''));
+                    const bChange = parseFloat(b.change.replace('%', '').replace('+', ''));
+                    return bChange - aChange;
+                });
+            } else if (filterValue === 'low-high') {
+                stocks.sort((a, b) => {
+                    const aChange = parseFloat(a.change.replace('%', '').replace('+', ''));
+                    const bChange = parseFloat(b.change.replace('%', '').replace('+', ''));
+                    return aChange - bChange;
+                });
             }
-            
-            const stocks = sectorStocks[sectorName];
-            const tbody = document.getElementById('stocks-table-body');
-            tbody.innerHTML = '';
-            
-            // Add back button row
-            const backRow = document.createElement('tr');
-            backRow.innerHTML = `
-                <td colspan="8">
-                    <button class="back-button" id="back-button">
-                        <i class="fas fa-arrow-left"></i> Back to Sectors
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(backRow);
-            
-            // Add event listener to back button
-            document.getElementById('back-button').addEventListener('click', function() {
-                populateStockTableWithSectors();
-                document.getElementById('table-title').textContent = 'Sector Performance Analysis';
-                updateChart('all');
-            });
-            
-            // Add stock rows
+            // Default sorting (most bullish first) is already in the data
+
+            // Populate stocks
+            stocksListBody.innerHTML = '';
             stocks.forEach(stock => {
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
                     <td class="stock-symbol">${stock.symbol}</td>
-                    <td>${stock.name}</td>
-                    <td>${stock.price.toLocaleString('en-IN')}</td>
-                    <td class="${stock.change1d >= 0 ? 'positive' : 'negative'}">${stock.change1d >= 0 ? '+' : ''}${stock.change1d}%</td>
-                    <td class="${stock.change7d >= 0 ? 'positive' : 'negative'}">${stock.change7d >= 0 ? '+' : ''}${stock.change7d}%</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <td class="stock-name">${stock.name}</td>
+                    <td class="stock-price">${stock.price}</td>
+                    <td class="stock-change ${stock.positive ? 'positive' : 'negative'}">${stock.change}</td>
                 `;
                 
-                tbody.appendChild(row);
+                stocksListBody.appendChild(row);
             });
-            
-            // Update table title
-            document.getElementById('table-title').textContent = `${sectorName} Sector Stocks`;
-            
-            // Update chart to show stock performance
-            updateChartForStocks(stocks, sectorName);
-        }
 
-        // Function to set up sector filtering
-        function setupSectorFiltering() {
-            document.querySelectorAll('.tab-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    document.querySelectorAll('.tab-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    const sector = this.dataset.sector;
-                    
-                    if (sector === 'all') {
-                        // Show all sectors
-                        populateStockTableWithSectors();
-                        document.getElementById('current-sector').textContent = 'All Sectors';
-                        updateChart('all');
-                    } else {
-                        // Show specific sector stocks
-                        showSectorStocks(sector);
-                    }
-                });
-            });
-        }
+            // Show details section
+            sectorDetails.style.display = 'block';
 
-        // Function to set up search functionality
-        function setupSearch() {
-            const searchInput = document.getElementById('search-input');
-            
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                
-                document.querySelectorAll('#stocks-table-body tr').forEach(row => {
-                    const sector = row.querySelector('.stock-symbol')?.textContent.toLowerCase();
-                    const index = row.cells?.[1]?.textContent.toLowerCase();
-                    
-                    if (sector && (sector.includes(searchTerm) || index?.includes(searchTerm))) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
+            // Scroll to the stocks list
+            setTimeout(() => {
+                sectorDetails.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         }
-
-        // Function to set up table sorting
-        function setupTableSorting() {
-            document.querySelectorAll('th.sortable').forEach(header => {
-                header.addEventListener('click', function() {
-                    const table = this.closest('table');
-                    const tbody = table.querySelector('tbody');
-                    const rows = Array.from(tbody.querySelectorAll('tr:not(:first-child)')); // Exclude back button row
-                    const index = Array.from(this.parentNode.children).indexOf(this);
-                    const isAscending = !this.classList.contains('sorted-asc');
-                    
-                    // Remove existing sort classes
-                    table.querySelectorAll('th').forEach(th => {
-                        th.classList.remove('sorted-asc', 'sorted-desc');
-                    });
-                    
-                    // Add new sort class
-                    this.classList.toggle('sorted-asc', isAscending);
-                    this.classList.toggle('sorted-desc', !isAscending);
-                    
-                    // Sort rows
-                    rows.sort((a, b) => {
-                        const aValue = a.children[index]?.textContent.trim() || '';
-                        const bValue = b.children[index]?.textContent.trim() || '';
-                        
-                        // Handle numeric values
-                        const aNum = parseFloat(aValue.replace(/[^\d.-]/g, ''));
-                        const bNum = parseFloat(bValue.replace(/[^\d.-]/g, ''));
-                        
-                        if (!isNaN(aNum) && !isNaN(bNum)) {
-                            return isAscending ? aNum - bNum : bNum - aNum;
-                        }
-                        
-                        // Handle percentage values
-                        const aPercent = parseFloat(aValue.replace('%', ''));
-                        const bPercent = parseFloat(bValue.replace('%', ''));
-                        
-                        if (!isNaN(aPercent) && !isNaN(bPercent)) {
-                            return isAscending ? aPercent - bPercent : bPercent - aPercent;
-                        }
-                        
-                        // Handle text values
-                        return isAscending ? 
-                            aValue.localeCompare(bValue) : 
-                            bValue.localeCompare(aValue);
-                    });
-                    
-                    // Re-append sorted rows
-                    rows.forEach(row => tbody.appendChild(row));
-                });
-            });
-        }
-
-        // Function to initialize and update the chart
-        let performanceChart;
-        function initChart() {
-            const ctx = document.getElementById('sector-performance-chart').getContext('2d');
-            
-            // Sort sectors by bullish sentiment (most bullish first)
-            const sortedSectors = [...sectors].sort((a, b) => {
-                const aBullish = sectorData[a].bullishCount / (sectorData[a].bullishCount + sectorData[a].bearishCount);
-                const bBullish = sectorData[b].bullishCount / (sectorData[b].bullishCount + sectorData[b].bearishCount);
-                return bBullish - aBullish;
-            });
-            
-            const sectorNames = sortedSectors;
-            const sectorChanges = sortedSectors.map(sector => sectorData[sector].change1d);
-            
-            performanceChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: sectorNames,
-                    datasets: [{
-                        label: '1-Day Change (%)',
-                        data: sectorChanges,
-                        backgroundColor: sectorChanges.map(change => 
-                            change >= 0 ? 'rgba(38, 166, 154, 0.7)' : 'rgba(239, 83, 80, 0.7)'
-                        ),
-                        borderColor: sectorChanges.map(change => 
-                            change >= 0 ? 'rgba(38, 166, 154, 1)' : 'rgba(239, 83, 80, 1)'
-                        ),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#f1f5f9'
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Sector Sentiment Ranking (Most Bullish to Most Bearish)',
-                            color: '#f1f5f9',
-                            font: {
-                                size: 16
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const sector = context.label;
-                                    const data = sectorData[sector];
-                                    return [
-                                        `1D: ${data.change1d >= 0 ? '+' : ''}${data.change1d}%`,
-                                        `7D: ${data.change7d >= 0 ? '+' : ''}${data.change7d}%`,
-                                        `Bullish: ${data.bullishCount}`,
-                                        `Bearish: ${data.bearishCount}`
-                                    ];
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(51, 65, 85, 0.5)'
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        y: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        }
-                    },
-                    animation: {
-                        duration: 2000,
-                        easing: 'easeOutQuart'
-                    }
-                }
-            });
-        }
-
-        // Function to update chart with specific period
-        function updateChart(period = '1d') {
-            if (!performanceChart) return;
-            
-            // Sort sectors by bullish sentiment (most bullish first)
-            const sortedSectors = [...sectors].sort((a, b) => {
-                const aBullish = sectorData[a].bullishCount / (sectorData[a].bullishCount + sectorData[a].bearishCount);
-                const bBullish = sectorData[b].bullishCount / (sectorData[b].bullishCount + sectorData[b].bearishCount);
-                return bBullish - aBullish;
-            });
-            
-            const sectorNames = sortedSectors;
-            const sectorChanges = sortedSectors.map(sector => 
-                period === '1d' ? sectorData[sector].change1d : sectorData[sector].change7d
-            );
-            
-            performanceChart.data.labels = sectorNames;
-            performanceChart.data.datasets[0].data = sectorChanges;
-            performanceChart.data.datasets[0].label = period === '1d' ? '1-Day Change (%)' : '7-Day Change (%)';
-            performanceChart.data.datasets[0].backgroundColor = sectorChanges.map(change => 
-                change >= 0 ? 'rgba(38, 166, 154, 0.7)' : 'rgba(239, 83, 80, 0.7)'
-            );
-            performanceChart.data.datasets[0].borderColor = sectorChanges.map(change => 
-                change >= 0 ? 'rgba(38, 166, 154, 1)' : 'rgba(239, 83, 80, 1)'
-            );
-            
-            performanceChart.update('animate');
-        }
-
-        // Function to update chart for stock performance
-        function updateChartForStocks(stocks, sectorName) {
-            if (!performanceChart) return;
-            
-            // Sort stocks by 1-day change (highest first)
-            const sortedStocks = [...stocks].sort((a, b) => b.change1d - a.change1d);
-            
-            const stockNames = sortedStocks.map(stock => stock.symbol);
-            const stockChanges = sortedStocks.map(stock => stock.change1d);
-            
-            performanceChart.data.labels = stockNames;
-            performanceChart.data.datasets[0].data = stockChanges;
-            performanceChart.data.datasets[0].label = '1-Day Change (%)';
-            performanceChart.data.datasets[0].backgroundColor = stockChanges.map(change => 
-                change >= 0 ? 'rgba(38, 166, 154, 0.7)' : 'rgba(239, 83, 80, 0.7)'
-            );
-            performanceChart.data.datasets[0].borderColor = stockChanges.map(change => 
-                change >= 0 ? 'rgba(38, 166, 154, 1)' : 'rgba(239, 83, 80, 1)'
-            );
-            
-            performanceChart.options.plugins.title.text = `${sectorName} Stocks Performance`;
-            performanceChart.options.indexAxis = 'y';
-            
-            performanceChart.update('animate');
-        }
-
-        // Set up time filter buttons
-        function setupTimeFilters() {
-            document.querySelectorAll('.time-filter').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    document.querySelectorAll('.time-filter').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    const period = this.dataset.period;
-                    updateChart(period);
-                });
-            });
-        }
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            populateSectorTabs();
-            populateSectorFooterLinks();
-            populateStockTableWithSectors();
-            setupSectorFiltering();
-            setupSearch();
-            setupTableSorting();
-            initChart();
-            setupTimeFilters();
-            
-            // Set most bullish sector
-            const mostBullish = sectors.reduce((prev, current) => {
-                const prevBullish = sectorData[prev].bullishCount / (sectorData[prev].bullishCount + sectorData[prev].bearishCount);
-                const currentBullish = sectorData[current].bullishCount / (sectorData[current].bullishCount + sectorData[current].bearishCount);
-                return currentBullish > prevBullish ? current : prev;
-            });
-            document.getElementById('most-bullish').textContent = mostBullish;
-        });
     </script>
 </body>
 </html>
