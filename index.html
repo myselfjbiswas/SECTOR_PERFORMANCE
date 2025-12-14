@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sector Scope | Indian Stock Market Analysis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         * {
             margin: 0;
@@ -508,11 +509,80 @@
 
         <div class="footer">
             <p>Sector Scope - Indian Stock Market Analysis | Updated: Today at 10:30 AM IST</p>
-            <p>Data sourced from NSE & BSE | For informational purposes only</p>
+            <p>Static/sample prices shown here do not update with the live market and may not reflect current quotes.</p>
+            <p>Data inspired by NSE & BSE | For educational and informational purposes only</p>
         </div>
     </div>
 
     <script>
+        // Optional: Google Sheets (or any JSON API) live-price integration helper
+        // ----------------------------------------------------------------------
+        // To use this:
+        // 1) Publish a Google Sheet or Apps Script as a web API that returns JSON like:
+        //    [ { "symbol": "SBIN", "price": 623.15, "changePercent": 1.02 }, ... ]
+        // 2) Put that URL into SHEET_API_URL below.
+        // 3) Uncomment the call to startSheetPriceRefresh() at the bottom of this script.
+
+        const SHEET_API_URL = ""; // e.g. "https://script.google.com/macros/s/XXXX/exec"
+
+        async function fetchPricesFromSheet() {
+            if (!SHEET_API_URL) return null; // not configured yet
+            try {
+                const res = await fetch(SHEET_API_URL);
+                if (!res.ok) throw new Error("Sheet API error: " + res.status);
+                const rows = await res.json();
+                // Expecting: [ { symbol, price, changePercent }, ... ]
+                const map = {};
+                rows.forEach(r => {
+                    if (!r.symbol) return;
+                    map[r.symbol.trim().toUpperCase()] = {
+                        price: Number(r.price),
+                        changePercent: Number(r.changePercent)
+                    };
+                });
+                return map;
+            } catch (err) {
+                console.error("Error fetching from Google Sheet:", err);
+                return null;
+            }
+        }
+
+        async function refreshPricesFromSheet() {
+            const liveMap = await fetchPricesFromSheet();
+            if (!liveMap) return;
+
+            // Update sectorData in-place
+            for (const sectorKey in sectorData) {
+                sectorData[sectorKey].stocks.forEach(stock => {
+                    const live = liveMap[stock.symbol];
+                    if (!live || isNaN(live.price) || isNaN(live.changePercent)) return;
+                    stock.price = `₹${live.price.toFixed(2)}`;
+                    stock.change = `${live.changePercent.toFixed(2)}%`;
+                    stock.positive = live.changePercent >= 0;
+                });
+            }
+
+            // Re-render if a sector is open
+            const currentSector = sectorDetails?.dataset.currentSector;
+            if (currentSector) {
+                showSectorStocks(currentSector);
+            }
+        }
+
+        function startSheetPriceRefresh(intervalMs = 15000) {
+            if (!SHEET_API_URL) {
+                console.warn("SHEET_API_URL is not set. Google Sheet live pricing is disabled.");
+                return;
+            }
+            // Initial fetch
+            refreshPricesFromSheet();
+            // Periodic refresh
+            setInterval(refreshPricesFromSheet, intervalMs);
+        }
+
+        // NOTE: To enable live updates from your sheet, after setting SHEET_API_URL above,
+        // call this once: startSheetPriceRefresh(15000); // refresh every 15s
+
         // Sector data with all stocks
         const sectorData = {
             fmcg: {
@@ -911,15 +981,32 @@
             stocksListBody.innerHTML = '';
             stocks.forEach(stock => {
                 const row = document.createElement('tr');
-                
+
+                // TradingView 5-minute chart URL helper using a specific shared chart layout ID
+                // Base: https://www.tradingview.com/chart/txeXKV5g/?symbol=NSE:SYMBOL
+                const tvSymbol = `NSE:${stock.symbol}`;
+                const tvUrl = `https://www.tradingview.com/chart/txeXKV5g/?symbol=${encodeURIComponent(tvSymbol)}`;
+
                 row.innerHTML = `
-                    <td class="stock-symbol">${stock.symbol}</td>
+                    <td class="stock-symbol"><button class="tv-link-btn" data-tv-url="${tvUrl}">${stock.symbol}</button></td>
                     <td class="stock-name">${stock.name}</td>
                     <td class="stock-price">${stock.price}</td>
                     <td class="stock-change ${stock.positive ? 'positive' : 'negative'}">${stock.change}</td>
                 `;
-                
+
                 stocksListBody.appendChild(row);
+
+                // Attach click handler to open/copy TradingView URL safely
+                row.querySelector('.tv-link-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const url = e.currentTarget.dataset.tvUrl;
+
+                    // Try window.open; if blocked, fall back to prompt so user can copy
+                    const win = window.open(url, '_blank', 'noopener');
+                    if (!win) {
+                        window.prompt('Popup blocked by browser. Copy this TradingView URL:', url);
+                    }
+                });
             });
 
             // Show details section
